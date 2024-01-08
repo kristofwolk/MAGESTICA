@@ -6,7 +6,7 @@
 #' @param coldata A table with the rows corresponding to the samples and the columns corresponding to the metadata. Columns must contain at least timepoint and replicate.
 #' @param control A vector containing the names of the control barcodes.
 #' @param alpha Significance cutoff (by default 0.1). If the adjusted p-value cutoff (FDR) used was a value other than 0.1, alpha should be set to that value.
-#' @param quantile_range Vector of two values, relating to the quantile points which are used to calculate thresholds. (from the WT LFCs) to see which .
+#' @param quantile_range Vector of two values, relating to the quantile points used to calculate thresholds (from the LFCs of the control barcodes). These two values should add up to 1. Default is c(0.1, 0.9).
 #' @param norm_method Which normalization approach to employ. Two normalization approaches are available: Geometric Mean of Pairwise Ratios (GMPR) and Relative Log Expression (RLE). Default is GMPR.
 #' @param pseudo_count A positive numeric value for the pseudo-counts to be added to account for the influence of zeros during analysis. Default is 1.
 #'
@@ -16,7 +16,7 @@
 #' @examples data(counts_MAGESTIC, metadata_MAGESTIC, control_bcs)
 #' MAGESTIC_output <- MAGESTIC(counts_MAGESTIC, metadata_MAGESTIC, control_bcs)
 #' MAGESTIC_output <- MAGESTIC(counts = counts_MAGESTIC, coldata = metadata_MAGESTIC, control = control_bcs, alpha = 0.1, quantile_range = c(0.025, 0.975), norm_method = "RLE", pseudo_counts = 0)
-MAGESTICA <- function(counts, coldata, control = NULL, alpha = 0.1, quantile_range = c(0.1,0.9), norm_method = "GMPR", pseudo_count = 0) {
+MAGESTICA <- function(counts, coldata, control = NULL, alpha = 0.1, quantile_range = c(0.1,0.9), norm_method = "GMPR", pseudo_count = 1) {
   # Check for missing values
   # If missing values are found in the count matrix, they are set to zero
   # If missing values are found in the coldata, We give an error
