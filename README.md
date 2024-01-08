@@ -11,13 +11,13 @@ library(MAGESTICA)
 
 ### Next, we need to load in the data. This should be: 
 
-  - A count matrix corresponding to the experimental design of MAGESTIC, The rownames should correspond to the barcodes, columns to the        sample names and a subset of the barcodes should correspond to an internal control (WT strains). Ideally, counts are already filtered      for low quality barcodes/ low abundance at timepoint 1. COUNTS SHOULD NOT BE NORMALIZED YET.
+  - A count matrix corresponding to the experimental design of MAGESTIC. The rownames should correspond to the barcodes, columns to the sample names, and a subset of the barcodes should correspond to an internal control (WT strains). Ideally, counts are already filtered for low quality barcodes/ low abundance at timepoint 1. COUNTS SHOULD NOT BE NORMALIZED YET.
   
-  - A dataframe containing the meta-information of the experiment. This dataframe should have in the rows, same sample names as the columns     of the count matrix and contain at least a column timepoint denoting from which timepoint the sample comes and a column replicate,         denoting the replicate. 
+  - A dataframe containing the meta-information of the experiment. This dataframe should have in the rows, same sample names as the columns of the count matrix and contain at least a column timepoint denoting from which timepoint the sample comes and a column replicate, denoting the replicate. 
   
   - A vector containing the names of the control barcodes.
   
-  - (Optional) Annotation files with rownames the barcodes. We can add this information to the results tables.
+  - (Optional) Annotation files with as rownames the barcodes. We can add this information to the results tables.
 
 
 #### The MAGESTICA package also provides some example data we can use for now:
@@ -26,8 +26,6 @@ library(MAGESTICA)
 cts <- counts_MAGESTIC
 meta <- metadata_MAGESTIC
 ctrl_bcs <- control_bcs
-
-head(cts); head(meta); head(ctrl_bcs)
 ```
 
 ### The optimized workflow is summarized into one function called 'MAGESTICA'. 
@@ -73,7 +71,6 @@ plot_counts(MAGESTICA_output$norm.counts, metadata_MAGESTIC, bc = bc) + ggplot2:
 ```{r}
 df <- df_consecutive_LFCs(MAGESTICA_output$dds.MAGESTICA)
 df <- add_monotonicity(df)
-head(df)
 ```
 
 #### Filter for monotonicity
