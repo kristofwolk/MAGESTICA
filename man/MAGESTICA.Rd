@@ -11,7 +11,7 @@ MAGESTICA(
   alpha = 0.1,
   quantile_range = c(0.1, 0.9),
   norm_method = "GMPR",
-  pseudo_count = 0
+  pseudo_count = 1
 )
 }
 \arguments{
@@ -23,7 +23,7 @@ MAGESTICA(
 
 \item{alpha}{Significance cutoff (by default 0.1). If the adjusted p-value cutoff (FDR) used was a value other than 0.1, alpha should be set to that value.}
 
-\item{quantile_range}{Vector of two values, relating to the quantile points which are used to calculate thresholds. (from the WT LFCs) to see which .}
+\item{quantile_range}{Vector of two values, relating to the quantile points used to calculate thresholds (from the LFCs of the control barcodes). These two values should add up to 1. Default is c(0.1, 0.9).}
 
 \item{norm_method}{Which normalization approach to employ. Two normalization approaches are available: Geometric Mean of Pairwise Ratios (GMPR) and Relative Log Expression (RLE). Default is GMPR.}
 
@@ -33,7 +33,7 @@ MAGESTICA(
 List with output of MAGESTICA. It contains: The normalized counts matrix (norm.counts), DESeqDataSet used for analysis (dds.MAGESTICA), results table of the analysis (results), size factors used during normalization (size.factors), LFC against which is tested for the analysis.
 }
 \description{
-The MAGESTIC pipeline. Function needs at least a count matrix, a meta file and list of the control barcode names to work.
+The MAGESTIC pipeline. Function needs at least a count matrix (raw), a meta file and list of the control barcode names to work.
 }
 \examples{
 data(counts_MAGESTIC, metadata_MAGESTIC, control_bcs)

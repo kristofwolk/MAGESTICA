@@ -1,6 +1,6 @@
 #' MAGESTIC analysis
 #'
-#' @description The MAGESTIC pipeline. Function needs at least a count matrix, a meta file and list of the control barcode names to work.
+#' @description The MAGESTIC pipeline. Function needs at least a count matrix (raw), a meta file and list of the control barcode names to work.
 #'
 #' @param counts A raw count matrix with the rows corresponding to the barcodes and the columns to the samples.
 #' @param coldata A table with the rows corresponding to the samples and the columns corresponding to the metadata. Columns must contain at least timepoint and replicate.
