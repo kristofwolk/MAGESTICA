@@ -1,9 +1,22 @@
+#' Plot Fitness Distribution
+#'
+#' @description Generates a plot showing fitness (= LFC) distributions of both edited and WT group.
+#'
+#' @param res Results table obtained from MAGESTICA (MAGESTICA_output$results).
+#' @param control Vector containing the control barcode names.
+#' @param thresholds Thresholds against which testing was done, calculated in MAGESTICA (MAGESTICA_output$min.fitness.thresholds).
+#'
+#' @return Plot of fitness distribution with thresholds against which were tested.
+#' @export
+#'
+#' @examples data(MAGESTICA_output, control_bcs)
+#' plot_fitness_distr(MAGESTICA_output$results, control = control_bcs, thresholds = MAGESTICA_output$min.fitness.thresholds)
 plot_fitness_distr <- function(res, control, thresholds = c(0,0)) {
 
   res <- base::data.frame(res)
   res$strain <- "edited"
 
-  indices_control <- get_indices_control(res, control)
+  indices_control <- MAGESTICA::get_indices_control(res, control)
   res[indices_control,]$strain <- "WT"
 
   res$strain <- base::as.factor(res$strain) %>% stats::relevel("edited")

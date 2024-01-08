@@ -1,3 +1,11 @@
+#' Helper function
+#'
+#' @description DO NOT USE
+#'
+#' @return
+#' @export
+#'
+#' @examples
 results_first_vs_other_timepoints_LFCshrinkage <- function(dds) {
   output <- base::list()
   for (t in 2:base::length(base::levels(dds$timepoint))) {
