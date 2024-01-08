@@ -22,7 +22,7 @@ plot_counts <- function(counts, meta, bc) {
   base::colnames(df)[1] <- "count"
 
   # Plot
-  ggplot2::ggplot(df, aes(x = timepoint, y = count)) +
-    ggplot2::geom_line(aes(group = replicate, color = replicate), size = 1.2) +
+  ggplot2::ggplot(df, ggplot2::aes(x = timepoint, y = count)) +
+    ggplot2::geom_line(ggplot2::aes(group = replicate, color = replicate), size = 1.2) +
     ggplot2::theme_bw()
 }
