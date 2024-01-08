@@ -1,3 +1,14 @@
+#' Create Table of Trajectory of LFCs
+#'
+#' @description Given a DESeqDataSet from the output of MAGESTICA, return a table containing the LFCs over consecutive timepoints (T1vsT2, T2vsT3, ...) for every barcode.
+#'
+#' @param dds DESeqDataSet corresponding to MAGESTICA pipeline (MAGESTICA_output$dds.MAGESTICA).
+#'
+#' @return Table containing the LFCs over consecutive timepoints (T1vsT2, T2vsT3, ...) for every barcode.
+#' @export
+#'
+#' @examples data(MAGESTICA_output)
+#' df <- df_consecutive_LFCs(MAGESTICA_output$dds.MAGESTICA)
 df_consecutive_LFCs <- function(dds) {
   list_results <- base::list()
   for (t in 1:(base::length(base::levels(dds$timepoint))-1)) {

@@ -1,4 +1,22 @@
-MAGESTICA <- function(counts, coldata, alpha = 0.1, quantile_range = c(0.1,0.9), control = NULL, norm_method = "GMPR", pseudo_count = 1) {
+#' MAGESTIC analysis
+#'
+#' @description The MAGESTIC pipeline. Function needs at least a count matrix, a meta file and list of the control barcode names to work.
+#'
+#' @param counts A raw count matrix with the rows corresponding to the barcodes and the columns to the samples.
+#' @param coldata A table with the rows corresponding to the samples and the columns corresponding to the metadata. Columns must contain at least timepoint and replicate.
+#' @param control A vector containing the names of the control barcodes.
+#' @param alpha Significance cutoff (by default 0.1). If the adjusted p-value cutoff (FDR) used was a value other than 0.1, alpha should be set to that value.
+#' @param quantile_range Vector of two values, relating to the quantile points which are used to calculate thresholds. (from the WT LFCs) to see which .
+#' @param norm_method Which normalization approach to employ. Two normalization approaches are available: Geometric Mean of Pairwise Ratios (GMPR) and Relative Log Expression (RLE). Default is GMPR.
+#' @param pseudo_count A positive numeric value for the pseudo-counts to be added to account for the influence of zeros during analysis. Default is 1.
+#'
+#' @return List with output of MAGESTICA. It contains: The normalized counts matrix (norm.counts), DESeqDataSet used for analysis (dds.MAGESTICA), results table of the analysis (results), size factors used during normalization (size.factors), LFC against which is tested for the analysis.
+#' @export
+#'
+#' @examples data(counts_MAGESTIC, metadata_MAGESTIC, control_bcs)
+#' MAGESTIC_output <- MAGESTIC(counts_MAGESTIC, metadata_MAGESTIC, control_bcs)
+#' MAGESTIC_output <- MAGESTIC(counts = counts_MAGESTIC, coldata = metadata_MAGESTIC, control = control_bcs, alpha = 0.1, quantile_range = c(0.025, 0.975), norm_method = "RLE", pseudo_counts = 0)
+MAGESTICA <- function(counts, coldata, control = NULL, alpha = 0.1, quantile_range = c(0.1,0.9), norm_method = "GMPR", pseudo_count = 0) {
   # Check for missing values
   # If missing values are found in the count matrix, they are set to zero
   # If missing values are found in the coldata, We give an error
@@ -34,11 +52,17 @@ MAGESTICA <- function(counts, coldata, alpha = 0.1, quantile_range = c(0.1,0.9),
 
   # Check if control barcodes are provided
   if (base::is.null(control)) {
-    stop("No control barcodes provided, please provide a list of control barcodes\n")
+    stop("No control barcodes provided, please provide a list of control barcodes.")
   }
+
+  # Check if pseudo_counts is a valid value
 
   if (!base::is.numeric(pseudo_count)) {
     stop("Pseudo-count is no numeric value, please provide a numeric value.")
+  }
+
+  if (pseudo_count < 0) {
+    stop("Pseudo-count is negative. Please provide a positive numeric value (or zero) for pseudo_count.")
   }
 
   # Convert to data frame (if that was not already the case) and add pseudo-counts
@@ -48,9 +72,6 @@ MAGESTICA <- function(counts, coldata, alpha = 0.1, quantile_range = c(0.1,0.9),
   for (i in 1:base::dim(coldata)[2]) {
     coldata[,i] <- base::factor(coldata[,i])
   }
-
-
-  # POTENTIALLY ADD: INSPECTION OF MISSING VALUES AND REMOVAL OF SAMPLES SHOULD THIS BE THE CASE
 
   # Add type of barcode (variant or WT) to counts and split by type
   counts2 <- counts
@@ -201,10 +222,10 @@ MAGESTICA <- function(counts, coldata, alpha = 0.1, quantile_range = c(0.1,0.9),
   }
 
 
-  l <- base::list(norm.counts = counts(dds_var, normalized = T),
-                  DESeqDataSet_variants = dds_var,
+  l <- base::list(norm.counts = DESeq2::counts(dds_var, normalized = T),
+                  dds.MAGESTICA = dds_var,
                   results = res,
-                  size.factors = sizeFactors(dds_var),
+                  size.factors = DESeq2::sizeFactors(dds_var),
                   min.fitness.thresholds = q)
 
   return(l)
